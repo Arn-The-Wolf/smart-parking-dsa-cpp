@@ -75,7 +75,7 @@ bool BillingManager::recordExit(
         return false;
     }
 
-    long long feeCalculation = static_cast<long long>(billedHours) * hourlyRate;
+    long long feeCalculation = vehicle.calculateFee(billedHours, hourlyRate);
     if (feeCalculation > std::numeric_limits<int>::max()) {
         std::cout << "Error: Calculated fee exceeds system limits. Contact administrator.\n";
         return false;
