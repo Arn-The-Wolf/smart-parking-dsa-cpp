@@ -12,7 +12,8 @@
 #include <vector>
 
 // Handles tariffs, fee calculation, immutable transaction history, and revenue indexes.
-class BillingManager {private:
+class BillingManager {
+private:
     TariffManager tariffManager;
     std::vector<ParkingTransaction> transactionHistory;
     std::unordered_map<std::string, std::vector<size_t>> plateHistoryIndex;
@@ -39,8 +40,17 @@ public:
     void displayDailyRevenue() const;
     long long getRevenueForDate(const std::string& dateKey) const;
 
-    const std::vector<ParkingTransaction>& getTransactionHistory() const { return transactionHistory; }
+    void clearAll();
+    void restoreTransaction(const ParkingTransaction& transaction);
+    void restoreDailyRevenue(const std::string& dateKey, long long revenue, int count);
+    void setNextTransactionId(int id);
+    TariffManager& getTariffManager();
     const TariffManager& getTariffManager() const { return tariffManager; }
+
+    const std::map<std::string, long long>& getDailyRevenueIndex() const { return dailyRevenueIndex; }
+    const std::map<std::string, int>& getDailyTransactionCount() const { return dailyTransactionCount; }
+    int getNextTransactionId() const { return nextTransactionId; }
+    const std::vector<ParkingTransaction>& getTransactionHistory() const { return transactionHistory; }
     int getTransactionCount() const { return static_cast<int>(transactionHistory.size()); }
 };
 

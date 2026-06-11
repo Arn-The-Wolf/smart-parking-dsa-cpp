@@ -12,7 +12,8 @@
 #include <unordered_map>
 
 // Tracks active parking sessions and coordinates slot allocation with billing on exit.
-class VehicleManager {private:
+class VehicleManager {
+private:
     SlotManager& slotManager;
     BillingManager& billingManager;
     std::unordered_map<std::string, std::unique_ptr<Vehicle>> activeSessions;
@@ -28,6 +29,11 @@ public:
 
     bool isVehicleParked(const std::string& plateNumber) const;
     std::chrono::system_clock::time_point getEntryTime(const std::string& plateNumber) const;
+
+    void clearAll();
+    bool restoreSession(const std::string& plateNumber, VehicleType vehicleType,
+                        const std::chrono::system_clock::time_point& entryTime,
+                        const std::string& slotId);
 
     void displayParkedVehicles() const;
     const std::unordered_map<std::string, std::unique_ptr<Vehicle>>& getActiveSessions() const {

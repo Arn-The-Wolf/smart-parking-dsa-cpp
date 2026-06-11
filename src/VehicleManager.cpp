@@ -127,6 +127,21 @@ std::chrono::system_clock::time_point VehicleManager::getEntryTime(
     return it->second->getEntryTime();
 }
 
+void VehicleManager::clearAll() {
+    activeSessions.clear();
+}
+
+bool VehicleManager::restoreSession(const std::string& plateNumber, VehicleType vehicleType,
+                                    const std::chrono::system_clock::time_point& entryTime,
+                                    const std::string& slotId) {
+    auto vehicle = VehicleFactory::create(vehicleType, plateNumber, entryTime, slotId);
+    if (!vehicle) {
+        return false;
+    }
+    activeSessions.emplace(plateNumber, std::move(vehicle));
+    return true;
+}
+
 void VehicleManager::displayParkedVehicles() const {
     if (activeSessions.empty()) {
         std::cout << "No vehicles currently parked.\n";

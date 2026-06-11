@@ -25,6 +25,7 @@ echo Compiling Kigali Smart Parking Management System (UCRT64)...
   src/InputValidator.cpp ^
   src/InputReader.cpp ^
   src/ConsoleStyle.cpp ^
+  src/DataPersistence.cpp ^
   -o smart_parking.exe
 if %ERRORLEVEL% EQU 0 (
     echo Build successful: smart_parking.exe

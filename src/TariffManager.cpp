@@ -24,6 +24,10 @@ bool TariffManager::updateRate(VehicleType type, int newRate) {
     return true;
 }
 
+void TariffManager::setRate(VehicleType type, int rate) {
+    hourlyRates[type] = rate;
+}
+
 void TariffManager::displayRates() const {
     std::cout << "Current Parking Tariffs (RWF per hour):\n";
     std::cout << "  Motorcycle: " << getRate(VehicleType::Motorcycle) << " RWF\n";

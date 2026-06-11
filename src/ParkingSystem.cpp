@@ -1,4 +1,5 @@
 #include "ParkingSystem.h"
+#include "ConsoleStyle.h"
 
 #include <chrono>
 #include <iostream>
@@ -6,7 +7,23 @@
 // ParkingSystem is the façade: it wires managers together and exposes one API to main.cpp.
 ParkingSystem::ParkingSystem()
     : vehicleManager(slotManager, billingManager),
-      reportManager(slotManager, vehicleManager, billingManager) {}
+      reportManager(slotManager, vehicleManager, billingManager) {
+    if (loadFromFile(getDefaultDataFile())) {
+        ConsoleStyle::printInfo("Restored previous session from " + getDefaultDataFile() + ".");
+    }
+}
+
+std::string ParkingSystem::getDefaultDataFile() {
+    return DataPersistence::kDefaultFile;
+}
+
+bool ParkingSystem::saveToFile(const std::string& filepath) const {
+    return DataPersistence::save(slotManager, vehicleManager, billingManager, filepath);
+}
+
+bool ParkingSystem::loadFromFile(const std::string& filepath) {
+    return DataPersistence::load(slotManager, vehicleManager, billingManager, filepath);
+}
 
 bool ParkingSystem::addSlot(const std::string& slotId, VehicleType supportedType,
                             const std::string& zone) {

@@ -32,6 +32,10 @@ public:
     void displayAvailableSlots() const;
     void displaySlotsByZone(const std::string& zone) const;
 
+    void clearAll();
+    void restoreSlot(const std::string& slotId, VehicleType supportedType,
+                     const std::string& zone, SlotStatus status);
+
     const std::unordered_map<std::string, ParkingSlot>& getSlots() const { return slots; }
     int getSlotCount() const { return static_cast<int>(slots.size()); }
 };

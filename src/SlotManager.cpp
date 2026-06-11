@@ -154,6 +154,21 @@ void SlotManager::displayAvailableSlots() const {
     }
 }
 
+void SlotManager::clearAll() {
+    slots.clear();
+    slotsByZone.clear();
+    availableByType.clear();
+}
+
+void SlotManager::restoreSlot(const std::string& slotId, VehicleType supportedType,
+                              const std::string& zone, SlotStatus status) {
+    slots.emplace(slotId, ParkingSlot(slotId, supportedType, zone, status));
+    slotsByZone[zone].push_back(slotId);
+    if (status == SlotStatus::Available) {
+        addToAvailabilityIndex(slotId, supportedType);
+    }
+}
+
 void SlotManager::displaySlotsByZone(const std::string& zone) const {
     auto it = slotsByZone.find(zone);
     if (it == slotsByZone.end() || it->second.empty()) {

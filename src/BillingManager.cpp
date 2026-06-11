@@ -173,6 +173,34 @@ void BillingManager::displayDailyRevenue() const {
     std::cout << "Total Revenue:     " << revenue << " RWF\n";
 }
 
+void BillingManager::clearAll() {
+    transactionHistory.clear();
+    plateHistoryIndex.clear();
+    dailyRevenueIndex.clear();
+    dailyTransactionCount.clear();
+    nextTransactionId = 1;
+    tariffManager = TariffManager();
+}
+
+void BillingManager::restoreTransaction(const ParkingTransaction& transaction) {
+    size_t index = transactionHistory.size();
+    transactionHistory.push_back(transaction);
+    plateHistoryIndex[transaction.getPlateNumber()].push_back(index);
+}
+
+void BillingManager::restoreDailyRevenue(const std::string& dateKey, long long revenue, int count) {
+    dailyRevenueIndex[dateKey] = revenue;
+    dailyTransactionCount[dateKey] = count;
+}
+
+void BillingManager::setNextTransactionId(int id) {
+    nextTransactionId = id;
+}
+
+TariffManager& BillingManager::getTariffManager() {
+    return tariffManager;
+}
+
 long long BillingManager::getRevenueForDate(const std::string& dateKey) const {
     auto it = dailyRevenueIndex.find(dateKey);
     if (it == dailyRevenueIndex.end()) {

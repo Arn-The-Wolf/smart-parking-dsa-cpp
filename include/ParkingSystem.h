@@ -2,6 +2,7 @@
 #define PARKING_SYSTEM_H
 
 #include "BillingManager.h"
+#include "DataPersistence.h"
 #include "Enums.h"
 #include "Report.h"
 #include "ReportManager.h"
@@ -61,6 +62,10 @@ public:
     bool hasAvailableSlot(VehicleType type) const;
     bool isVehicleParked(const std::string& plateNumber) const;
     std::chrono::system_clock::time_point getVehicleEntryTime(const std::string& plateNumber) const;
+
+    bool saveToFile(const std::string& filepath = DataPersistence::kDefaultFile) const;
+    bool loadFromFile(const std::string& filepath = DataPersistence::kDefaultFile);
+    static std::string getDefaultDataFile();
 
     int getSlotCount() const { return slotManager.getSlotCount(); }
     int getActiveVehicleCount() const { return vehicleManager.getActiveVehicleCount(); }

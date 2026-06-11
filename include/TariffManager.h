@@ -13,6 +13,7 @@ public:
 
     int getRate(VehicleType type) const;
     bool updateRate(VehicleType type, int newRate);
+    void setRate(VehicleType type, int rate);
     void displayRates() const;
 };
 

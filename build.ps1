@@ -27,6 +27,7 @@ Write-Host "Compiling with UCRT64 g++..."
   src/InputValidator.cpp `
   src/InputReader.cpp `
   src/ConsoleStyle.cpp `
+  src/DataPersistence.cpp `
   -o smart_parking.exe
 
 if ($LASTEXITCODE -eq 0) {

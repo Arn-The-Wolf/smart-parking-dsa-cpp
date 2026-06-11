@@ -20,6 +20,16 @@ constexpr int kMinMenuOption = 0;
 constexpr int kMaxMenuOption = 16;
 constexpr const char* kAuthorName = "Author: RUYANGE Arnold";
 
+bool saveAllData(ParkingSystem& system) {
+    const std::string dataFile = ParkingSystem::getDefaultDataFile();
+    if (system.saveToFile(dataFile)) {
+        ConsoleStyle::printSuccess("All parking data saved to file: " + dataFile);
+        return true;
+    }
+    ConsoleStyle::printError("Failed to save data to file: " + dataFile);
+    return false;
+}
+
 bool selectVehicleType(VehicleType& type) {
     std::cout << "Select vehicle type:\n";
     std::cout << "  1. Motorcycle\n";
@@ -369,6 +379,7 @@ int main() {
 
         int choice = 0;
         if (!readMenuChoice(choice)) {
+            saveAllData(system);
             ConsoleStyle::printWarning("Exiting program.");
             break;
         }
@@ -394,6 +405,7 @@ int main() {
             case 16: system.runBillingSelfTest(); break;
             case 0:
                 if (confirmExit()) {
+                    saveAllData(system);
                     running = false;
                     ConsoleStyle::printSuccess("Thank you for using Smart Parking System. Goodbye!");
                 }
@@ -404,6 +416,7 @@ int main() {
         }
 
         if (!continueRunning) {
+            saveAllData(system);
             running = false;
             if (choice != 0) {
                 ConsoleStyle::printWarning("Exiting program.");
