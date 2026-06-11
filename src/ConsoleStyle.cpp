@@ -51,6 +51,10 @@ void printTitle(const std::string& text) {
     std::cout << kCyan << kBold << text << kReset << "\n";
 }
 
+void printAuthor(const std::string& text) {
+    std::cout << kBlue << kBold << "        " << text << kReset << "\n";
+}
+
 void printSubtitle(const std::string& text) {
     std::cout << kDim << text << kReset << "\n";
 }
@@ -60,15 +64,16 @@ void printSection(const std::string& text) {
 }
 
 void printMenuItem(int option, const std::string& text) {
+    const char* prefix = (option < 10) ? "    " : "   ";
     if (option == 0) {
-        std::cout << kRed << kBold << "    " << option << ".  " << kReset << kRed << text << kReset << "\n";
+        std::cout << kRed << kBold << prefix << option << ".  " << kReset << kRed << text << kReset << "\n";
         return;
     }
-    if (option >= 13) {
-        std::cout << kMagenta << "   " << option << ".  " << kReset << text << "\n";
+    if (option >= 14) {
+        std::cout << kMagenta << prefix << option << ".  " << kReset << text << "\n";
         return;
     }
-    std::cout << kGreen << "    " << option << ".  " << kReset << text << "\n";
+    std::cout << kGreen << prefix << option << ".  " << kReset << text << "\n";
 }
 
 void printSuccess(const std::string& text) {

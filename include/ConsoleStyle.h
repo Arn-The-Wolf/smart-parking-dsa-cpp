@@ -12,6 +12,7 @@ void reset();
 
 void printBannerLine(char fill = '=');
 void printTitle(const std::string& text);
+void printAuthor(const std::string& text);
 void printSubtitle(const std::string& text);
 void printSection(const std::string& text);
 void printMenuItem(int option, const std::string& text);

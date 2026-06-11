@@ -18,6 +18,7 @@ namespace {
 
 constexpr int kMinMenuOption = 0;
 constexpr int kMaxMenuOption = 16;
+constexpr const char* kAuthorName = "Author: RUYANGE Arnold";
 
 bool selectVehicleType(VehicleType& type) {
     std::cout << "Select vehicle type:\n";
@@ -32,13 +33,13 @@ bool selectVehicleType(VehicleType& type) {
             return false;
         }
         if (choice == "0") {
-            std::cout << "Operation cancelled.\n";
+            ConsoleStyle::printInfo("Operation cancelled.");
             return false;
         }
         if (parseVehicleType(choice, type)) {
             return true;
         }
-        std::cout << "Invalid choice. Enter 1, 2, 3, or 0 to cancel.\n";
+        ConsoleStyle::printError("Invalid choice. Enter 1, 2, 3, or 0 to cancel.");
     }
 }
 
@@ -51,7 +52,7 @@ bool readValidatedPlate(const std::string& prompt, std::string& out) {
         if (InputValidator::isValidPlateNumber(out, error)) {
             return true;
         }
-        std::cout << "Invalid plate: " << error << "\n";
+        ConsoleStyle::printError("Invalid plate: " + error);
     }
 }
 
@@ -64,7 +65,7 @@ bool readValidatedSlotId(const std::string& prompt, std::string& out) {
         if (InputValidator::isValidSlotId(out, error)) {
             return true;
         }
-        std::cout << "Invalid slot ID: " << error << "\n";
+        ConsoleStyle::printError("Invalid slot ID: " + error);
     }
 }
 
@@ -77,7 +78,7 @@ bool readValidatedZone(const std::string& prompt, std::string& out) {
         if (InputValidator::isValidZone(out, error)) {
             return true;
         }
-        std::cout << "Invalid zone: " << error << "\n";
+        ConsoleStyle::printError("Invalid zone: " + error);
     }
 }
 
@@ -91,7 +92,7 @@ bool readValidatedRate(int& out) {
         if (InputValidator::isValidHourlyRate(out, error)) {
             return true;
         }
-        std::cout << error << "\n";
+        ConsoleStyle::printError(error);
     }
 }
 
@@ -104,7 +105,7 @@ bool readValidatedParkingMinutes(const std::string& prompt, int& out) {
         if (InputValidator::isValidParkingMinutes(out, error)) {
             return true;
         }
-        std::cout << error << "\n";
+        ConsoleStyle::printError(error);
     }
 }
 
@@ -126,15 +127,27 @@ bool selectPaymentMethod(std::string& method) {
         } else if (choice == "3" || choice == "Card") {
             method = "Card";
         } else {
-            std::cout << "Invalid choice. Enter 1, 2, or 3.\n";
+            ConsoleStyle::printError("Invalid choice. Enter 1, 2, or 3.");
             continue;
         }
         std::string error;
         if (InputValidator::isValidPaymentMethod(method, error)) {
             return true;
         }
-        std::cout << error << "\n";
+        ConsoleStyle::printError(error);
     }
+}
+
+bool confirmExit() {
+    bool confirmed = false;
+    if (!readYesNo("Are you sure you want to exit? (y/n): ", confirmed)) {
+        return false;
+    }
+    if (!confirmed) {
+        ConsoleStyle::printInfo("Exit cancelled. Returning to menu.");
+        return false;
+    }
+    return true;
 }
 
 void loadSampleData(ParkingSystem& system) {
@@ -160,13 +173,15 @@ void loadSampleData(ParkingSystem& system) {
             added++;
         }
     }
-    std::cout << "\nSample data: " << added << " slot(s) added, " << skipped << " skipped (duplicates).\n";
+    ConsoleStyle::printSuccess("Sample data: " + std::to_string(added) + " slot(s) added, "
+                               + std::to_string(skipped) + " skipped (duplicates).");
 }
 
 void printMainMenu() {
     std::cout << "\n";
     ConsoleStyle::printBannerLine('=');
     ConsoleStyle::printTitle("   KIGALI SMART PARKING MANAGEMENT");
+    ConsoleStyle::printAuthor(kAuthorName);
     ConsoleStyle::printBannerLine('=');
 
     ConsoleStyle::printSection("SLOT MANAGEMENT");
@@ -174,29 +189,29 @@ void printMainMenu() {
     ConsoleStyle::printMenuItem(2, "Remove parking slot");
     ConsoleStyle::printMenuItem(3, "View all slots");
     ConsoleStyle::printMenuItem(4, "Available slots report (polymorphic)");
-    ConsoleStyle::printMenuItem(15, "Search slots by zone");
+    ConsoleStyle::printMenuItem(5, "Search slots by zone");
 
     std::cout << "\n";
     ConsoleStyle::printSection("VEHICLE OPERATIONS");
-    ConsoleStyle::printMenuItem(5, "Register vehicle entry");
-    ConsoleStyle::printMenuItem(6, "Process vehicle exit + payment");
-    ConsoleStyle::printMenuItem(7, "Parked vehicles report (polymorphic)");
+    ConsoleStyle::printMenuItem(6, "Register vehicle entry");
+    ConsoleStyle::printMenuItem(7, "Process vehicle exit + payment");
+    ConsoleStyle::printMenuItem(8, "Parked vehicles report (polymorphic)");
 
     std::cout << "\n";
     ConsoleStyle::printSection("PRICING");
-    ConsoleStyle::printMenuItem(8, "View current tariffs");
-    ConsoleStyle::printMenuItem(9, "Update parking price");
+    ConsoleStyle::printMenuItem(9, "View current tariffs");
+    ConsoleStyle::printMenuItem(10, "Update parking price");
 
     std::cout << "\n";
     ConsoleStyle::printSection("REPORTS (Task 5)");
-    ConsoleStyle::printMenuItem(10, "Vehicle parking history");
-    ConsoleStyle::printMenuItem(11, "All transaction history");
-    ConsoleStyle::printMenuItem(12, "Daily revenue report (polymorphic)");
+    ConsoleStyle::printMenuItem(11, "Vehicle parking history");
+    ConsoleStyle::printMenuItem(12, "All transaction history");
+    ConsoleStyle::printMenuItem(13, "Daily revenue report (polymorphic)");
 
     std::cout << "\n";
     ConsoleStyle::printSection("TESTING / DEMO");
-    ConsoleStyle::printMenuItem(13, "Load sample data");
-    ConsoleStyle::printMenuItem(14, "Run automated demo");
+    ConsoleStyle::printMenuItem(14, "Load sample data");
+    ConsoleStyle::printMenuItem(15, "Run automated demo");
     ConsoleStyle::printMenuItem(16, "Run billing edge-case self test");
 
     std::cout << "\n";
@@ -217,7 +232,7 @@ bool handleAddSlot(ParkingSystem& system) {
 
 bool handleRemoveSlot(ParkingSystem& system) {
     if (system.getSlotCount() == 0) {
-        std::cout << "No slots configured. Add slots first (option 1 or 13).\n";
+        ConsoleStyle::printWarning("No slots configured. Add slots first (option 1 or 14).");
         return true;
     }
     std::string slotId;
@@ -228,7 +243,7 @@ bool handleRemoveSlot(ParkingSystem& system) {
 
 bool handleVehicleEntry(ParkingSystem& system) {
     if (system.getSlotCount() == 0) {
-        std::cout << "No parking slots configured. Use option 1 or 13 first.\n";
+        ConsoleStyle::printWarning("No parking slots configured. Use option 1 or 14 first.");
         return true;
     }
 
@@ -238,8 +253,8 @@ bool handleVehicleEntry(ParkingSystem& system) {
     if (!selectVehicleType(type)) return true;
 
     if (!system.hasAvailableSlot(type)) {
-        std::cout << "No available " << vehicleTypeToString(type)
-                  << " slots right now. Check option 4 or add more slots.\n";
+        ConsoleStyle::printWarning("No available " + std::string(vehicleTypeToString(type))
+                                   + " slots. Check option 4 or add more slots.");
         return true;
     }
 
@@ -261,7 +276,7 @@ bool handleVehicleEntry(ParkingSystem& system) {
 
 bool handleVehicleExit(ParkingSystem& system) {
     if (system.getActiveVehicleCount() == 0) {
-        std::cout << "No vehicles are currently parked.\n";
+        ConsoleStyle::printWarning("No vehicles are currently parked.");
         return true;
     }
 
@@ -272,7 +287,7 @@ bool handleVehicleExit(ParkingSystem& system) {
     if (!readValidatedPlate("Enter plate number: ", plate)) return false;
 
     if (!system.isVehicleParked(plate)) {
-        std::cout << "Vehicle '" << plate << "' is not in the active parking list.\n";
+        ConsoleStyle::printError("Vehicle '" + plate + "' is not in the active parking list.");
         return true;
     }
 
@@ -290,8 +305,8 @@ bool handleVehicleExit(ParkingSystem& system) {
         auto entryTime = system.getVehicleEntryTime(plate);
 
         if (exitTime < entryTime) {
-            std::cout << "Error: Exit time (" << formatDateTime(exitTime)
-                      << ") is before entry time (" << formatDateTime(entryTime) << ").\n";
+            ConsoleStyle::printError("Exit time (" + formatDateTime(exitTime)
+                                     + ") is before entry time (" + formatDateTime(entryTime) + ").");
             return true;
         }
         system.processExit(plate, exitTime, paymentMethod, paymentReceived);
@@ -325,7 +340,7 @@ bool handleVehicleHistory(ParkingSystem& system) {
 
 bool handleZoneSearch(ParkingSystem& system) {
     if (system.getSlotCount() == 0) {
-        std::cout << "No slots configured yet.\n";
+        ConsoleStyle::printWarning("No slots configured yet.");
         return true;
     }
     std::string zone;
@@ -340,13 +355,13 @@ bool readMenuChoice(int& choice) {
 
 }  // namespace
 
-// Presentation layer entry point — all user input is validated before reaching managers.
 int main() {
     ConsoleStyle::enableColors();
     ParkingSystem system;
 
     ConsoleStyle::printTitle("Welcome to Kigali Smart Parking Management System");
-    ConsoleStyle::printSubtitle("In-memory DSA solution — real-time slot allocation and billing.");
+    ConsoleStyle::printAuthor(kAuthorName);
+    ConsoleStyle::printSubtitle("In-memory DSA solution - real-time slot allocation and billing.");
 
     bool running = true;
     while (running) {
@@ -365,21 +380,23 @@ int main() {
             case 2:  continueRunning = handleRemoveSlot(system); break;
             case 3:  system.displayAllSlots(); break;
             case 4:  system.displayAvailableSlotsReport(); break;
-            case 5:  continueRunning = handleVehicleEntry(system); break;
-            case 6:  continueRunning = handleVehicleExit(system); break;
-            case 7:  system.displayParkedVehiclesReport(); break;
-            case 8:  system.displayCurrentTariffs(); break;
-            case 9:  continueRunning = handleUpdatePrice(system); break;
-            case 10: continueRunning = handleVehicleHistory(system); break;
-            case 11: system.displayAllHistory(); break;
-            case 12: system.displayDailyRevenueReport(); break;
-            case 13: loadSampleData(system); break;
-            case 14: system.runAutomatedDemo(); break;
-            case 15: continueRunning = handleZoneSearch(system); break;
+            case 5:  continueRunning = handleZoneSearch(system); break;
+            case 6:  continueRunning = handleVehicleEntry(system); break;
+            case 7:  continueRunning = handleVehicleExit(system); break;
+            case 8:  system.displayParkedVehiclesReport(); break;
+            case 9:  system.displayCurrentTariffs(); break;
+            case 10: continueRunning = handleUpdatePrice(system); break;
+            case 11: continueRunning = handleVehicleHistory(system); break;
+            case 12: system.displayAllHistory(); break;
+            case 13: system.displayDailyRevenueReport(); break;
+            case 14: loadSampleData(system); break;
+            case 15: system.runAutomatedDemo(); break;
             case 16: system.runBillingSelfTest(); break;
             case 0:
-                running = false;
-                ConsoleStyle::printSuccess("Thank you for using Smart Parking System. Goodbye!");
+                if (confirmExit()) {
+                    running = false;
+                    ConsoleStyle::printSuccess("Thank you for using Smart Parking System. Goodbye!");
+                }
                 break;
             default:
                 ConsoleStyle::printError("Invalid option. Please try again.");

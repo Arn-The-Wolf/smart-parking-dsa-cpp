@@ -56,19 +56,19 @@ Or use `.\build.bat` (also pins UCRT64).
 | 2 | Remove unoccupied slot |
 | 3 | View all slots |
 | 4 | Available slots report (polymorphic) |
-| 5 | Register entry (optional test entry time) |
-| 6 | Exit + payment recording |
-| 7 | Parked vehicles report (polymorphic) |
-| 8 | View tariffs |
-| 9 | Update parking price |
-| 10 | Vehicle history |
-| 11 | All transactions |
-| 12 | Daily revenue report (polymorphic) |
-| 13 | Load sample data |
-| 14 | Automated demo |
-| 15 | Search slots by zone |
+| 5 | Search slots by zone |
+| 6 | Register entry (optional test entry time) |
+| 7 | Exit + payment recording |
+| 8 | Parked vehicles report (polymorphic) |
+| 9 | View tariffs |
+| 10 | Update parking price |
+| 11 | Vehicle history |
+| 12 | All transactions |
+| 13 | Daily revenue report (polymorphic) |
+| 14 | Load sample data |
+| 15 | Automated demo |
 | 16 | Billing edge-case self test |
-| 0 | Exit |
+| 0 | Exit (Y/N confirmation) |
 
 ## Formal Test Matrix
 
