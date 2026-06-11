@@ -19,7 +19,7 @@ See `smart_parking_system_architecture.svg` and `Core_compents_DSA_Justification
 |--------------|-----------------|--------|
 | Motorcycle   | 500             | Assignment brief |
 | Car          | 1,000           | Assignment brief |
-| Truck        | 1,000           | System default (brief lists Motorcycle & Car only; update via menu 9) |
+| Truck        | 1,000           | System default (brief lists Motorcycle & Car only; update via menu 10) |
 
 ## Input Validation
 
